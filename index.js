@@ -11,6 +11,13 @@ app.get('/',function(req,res){
 })
 
 
+app.route('/api/timestamp/:date')
+.get((req,res)=>{
+    var dateString = (req.params.date).split("-");
+    var date = new Date( dateString[0], parseInt(dateString[1])-1, parseInt(dateString[2])+1);
+    console.log(date);
+})
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
-  });
+});
