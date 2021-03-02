@@ -30,7 +30,7 @@ app.route('/api/timestamp/:date')
         milliseconds = param;
     }
     if(date=="Invalid Date"){
-        return res.json({"error":"Invalid date format"});
+        return res.json({"error":"Invalid Date"});
     }
     dateArray = date.toDateString().split(" ");
     res.json({"unix":milliseconds, "utc":`${dateArray[0]}, ${dateArray[2]} ${dateArray[1]} ${dateArray[3]} 00:00:00 GMT`});
