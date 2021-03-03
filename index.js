@@ -9,11 +9,17 @@ app.use('/public',express.static(__dirname+'/public'));
 app.get('/',function(req,res){
     res.sendFile(__dirname+'/views/index.html');
 })
+app.get('/api/timestamp/',(req,res)=>{
+    var milliseconds = 0
+    var dateArray=[];
+    var date =new Date(Date.now());
+    console.log(date);
+    milliseconds = date.getTime();
+    dateArray = date.toDateString().split(" ");
+    res.json({ "unix":parseInt(milliseconds), "utc":`${dateArray[0]}, ${dateArray[2]} ${dateArray[1]} ${dateArray[3]} 00:00:00 GMT` });
 
-
-const Week=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-
-app.route('/api/timestamp/:date')
+})
+app.route('/api/timestamp/:date?')
 .get((req,res)=>{
     var param = (req.params.date);
     var check = param.includes("-");
@@ -25,18 +31,18 @@ app.route('/api/timestamp/:date')
         milliseconds = date.getTime();
         dateArray = date.toDateString().split(" ");
     }else{
-        var date = new Date(parseInt(param));
-        console.log(date);
+              var date = new Date(parseInt(param));
         milliseconds = param;
     }
     if(date=="Invalid Date"){
         return res.json({"error":"Invalid Date"});
     }
     dateArray = date.toDateString().split(" ");
-    res.json({"unix":milliseconds, "utc":`${dateArray[0]}, ${dateArray[2]} ${dateArray[1]} ${dateArray[3]} 00:00:00 GMT`});
+    res.json({ "unix":parseInt(milliseconds), "utc":`${dateArray[0]}, ${dateArray[2]} ${dateArray[1]} ${dateArray[3]} 00:00:00 GMT` });
 })
 
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+// listen for requests :)
+const listener = app.listen(process.env.PORT, () => {
+  console.log("Your app is listening on port " + listener.address().port);
 });
